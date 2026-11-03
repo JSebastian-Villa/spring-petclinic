@@ -19,5 +19,14 @@ pipeline {
         sh 'docker build -t sebastianvilla10/spring-petclinic:gestion-udem-jenkins .'
       }
     }
+    stage('Docker Push') {
+      agent any
+      steps {
+        withCredentials([usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
+          sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
+          sh 'docker push sebastianvilla10/spring-petclinic:gestion-udem-jenkins'
+        }
+      }
+    }
   }
 }
